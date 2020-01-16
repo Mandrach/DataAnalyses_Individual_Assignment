@@ -1,0 +1,64 @@
+---
+title: "Individual Assignment - Data Analyzes"
+output: html_notebook
+---
+
+What is the number of fatalities in Israel in the year 2001? In the following we want to try to answer this question by analyzing the UCDP conflict dataset file. Each line (each entry) of the dataset is one conflict. (For more information what a conflict is: Sundberg, Ralph & Erik Melander, 2013)
+
+About the dataset:
+"Thus, the dataset is constructed in such a way as maximize the comparability and consistency across time and space, and provide a globally consistent image of the
+phenomenon of organized violence.In effect, the goal of UCDP GED is not to present the most complete and accurate image of a certain conflict at a certain point in time, but rather be a tool for the global understanding of subnational conflict patterns and trends." - (Croicu, Mihai & Sundberg, 2016)
+
+The data has a lot of variables, amongst them the country, the year of the conflict, the best estimated guess for total fatalities (aggregated for both sides), type of conflict, region, etc.
+
+For our goal it shall be enough to look at the country, year, best estimated aggregated guess, and possibly some more variables of future interest, which are filtered out during the R processing.
+
+Methods:
+First, load the tidyverse for additional funtions and read the csv file we created out of the json file by using Python.
+
+
+```{r}
+#loading tidyverse
+  library(tidyverse)
+  conflicts <- read.csv("../data/israel_data.csv")
+
+```
+
+Next, we filter out all relevant columns for the research question. First we need all entries for Israel from the whole dataset.
+```{r}
+#First, we select from our data only the entries for the country Israel.
+israel_data <- conflicts %>%
+  filter (Country == 'Israel')
+```
+Then, we need all entries for the year 2001.
+```{r}
+#Second, we select from all Israel entries the ones for the year 2001
+israel_2001 <- israel_data %>%
+    filter (Year == 2001)
+```
+Now that we have the data we need, we can give a result of the fatalities in Israel in the year 2001. Let us create a bargraph for that...because we can!
+```{r}
+# Bar-plot of year and amount of fatalities (best guessed)
+ggplot (data = israel_2001) +
+  geom_col (mapping = aes(x = Year, y = best_fatality_guess),  fill = "blue")  +
+  xlab("Year") +
+  ylab("Fatalities in 100") +
+  ggtitle("Amount of fatalities in Israel in 2001")
+
+```
+Is it not beautiful?
+Anyway, we have a graph now! But we would still like to know the actual number.
+
+```{r}
+israel_2001 %>%
+  summarize(total_fatalities = sum(best_fatality_guess))
+```
+The total sum of fatalities in Israel in 2001 is 355.
+
+
+Bibliography:
+Sundberg, Ralph, and Erik Melander, 2013, “Introducing the UCDP Georeferenced Event Dataset”,
+Journal of Peace Research, vol.50, no.4, 523-532
+
+Croicu, Mihai and Ralph Sundberg, 2016, “UCDP GED Codebook version 5.0”, Department of
+Peace and Conflict Research, Uppsala University
