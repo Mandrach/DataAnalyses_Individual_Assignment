@@ -20,7 +20,7 @@ First, load the tidyverse for additional funtions and read the csv file we creat
 ```{r}
 #loading tidyverse
   library(tidyverse)
-  conflicts <- read.csv("../data/israel_data.csv")
+  conflicts <- read_csv("../data/israel_data.csv")
 
 ```
 
@@ -88,6 +88,25 @@ israel_2002_01 %>%
 ```
 The total sum of fatalities in Israel in 2001 is 355. Therefore, the total fatalities for the year 2002 equals to 1235-355 = 880.
 (cheap, maybe, but works at the moment)
+
+
+```{r}
+#comparison for Israel over several years, full data set.
+israel_years <- israel_data %>%
+  filter (Year >= 1989, Year <= 2015)
+```
+
+```{r}
+# Bar-plot for amount of fatalities for Israel over years for the full data set 1989 - 2015 (26 years)
+ggplot (data = israel_years) +
+  geom_col (mapping = aes(x = Year, y = best_fatality_guess),  fill = "blue")  +
+  xlab("Year") +
+  ylab("Fatalities in 100") +
+  ggtitle("Amount of fatalities in Israel between 1990 and 2010") +
+  
+  ggsave('israel_over_years.png')
+```
+
 
 
 Bibliography:
