@@ -45,6 +45,8 @@ ggplot (data = israel_2001) +
   ylab("Fatalities in 100") +
   ggtitle("Amount of fatalities in Israel in 2001")
 
+
+
 ```
 Is it not beautiful?
 Anyway, we have a graph now! But we would still like to know the actual number.
@@ -54,6 +56,31 @@ israel_2001 %>%
   summarize(total_fatalities = sum(best_fatality_guess))
 ```
 The total sum of fatalities in Israel in 2001 is 355.
+
+
+Now, we want to compare the total fatalities in Israel over years. First, we start comparing it to 2002, the following year of the 9/11 attacks. The attacks having happened quite late in 2001, we would expect an increase in conflicts for the following year at least.
+```{r}
+# Filtering out the year 2002 or 2001
+israel_2002_01 <- israel_data %>% 
+  filter (Year == 2002 | Year == 2001)
+```
+
+```{r}
+# grouping it by year
+israel_02_01_grouped %>%
+  israel_2002_01 <- group_by(Year)
+```
+
+```{r}
+# Bar-plot for 2001 and 2002 and amount of fatalities (best guessed)
+ggplot (data = israel_2002_01) +
+  geom_col (mapping = aes(x = Year, y = best_fatality_guess),  fill = "blue")  +
+  xlab("Year") +
+  ylab("Fatalities in 100") +
+  ggtitle("Amount of fatalities in Israel in 2001 & 2002")
+
+```
+
 
 
 Bibliography:
