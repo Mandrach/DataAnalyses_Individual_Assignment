@@ -85,7 +85,7 @@ ggplot (data = israel_02_01_grouped) +
   ylab("Fatalities in 100") +
   ggtitle("Amount of fatalities in Israel in 2001 & 2002") +
   
-  ggsave('israel_fatal_2001_02.pdf')
+  ggsave('israel_fatal_01_02.pdf')
 ```
 ```{r}
 israel_2002_01 %>%
@@ -99,12 +99,19 @@ The total sum of fatalities in Israel in 2001 is 355. Therefore, the total fatal
 #comparison for Israel over several years, full data set.
 israel_years <- israel_data %>%
   filter (Year >= 1989, Year <= 2015)
+
+```
+
+```{r}
+israel_years_cor <- israel_years %>%
+  group_by(Year) %>%
+  summarize(sum=sum(best_fatality_guess, na.rm=T))
 ```
 
 ```{r}
 # Bar-plot for amount of fatalities for Israel over years for the full data set 1989 - 2015 (26 years)
-ggplot (data = israel_years) +
-  geom_col (mapping = aes(x = Year, y = best_fatality_guess),  fill = "blue")  +
+ggplot (data = israel_years_cor) +
+  geom_col (mapping = aes(x = Year, y = sum),  fill = "blue")  +
   xlab("Year") +
   ylab("Fatalities in 100") +
   ggtitle("Amount of fatalities in Israel between 1990 and 2010") +
