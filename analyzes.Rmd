@@ -45,7 +45,7 @@ ggplot (data = israel_2001) +
   ylab("Fatalities in 100") +
   ggtitle("Amount of fatalities in Israel in 2001") +
 
-  ggsave('israel_fatal_2001.png')
+  ggsave('israel_fatal_2001.pdf')
 
 ```
 Is it not beautiful?
@@ -68,19 +68,24 @@ israel_2002_01 <- israel_data %>%
 
 ```{r}
 # grouping it by year
-israel_02_01_grouped %>%
-  israel_2002_01 <- group_by(Year)
+israel_02_01_grouped <- israel_2002_01 %>%
+  group_by(Year) %>%
+  summarize(sum=sum(best_fatality_guess, na.rm=T))
+  
 ```
 
 ```{r}
 # Bar-plot for 2001 and 2002 and amount of fatalities (best guessed)
-ggplot (data = israel_2002_01) +
-  geom_col (mapping = aes(x = Year, y = best_fatality_guess),  fill = "blue")  +
+ggplot (data = israel_02_01_grouped) +
+  geom_col (mapping = aes(x = Year, y = sum),
+            fill = "blue"
+            )  +
   xlab("Year") +
+  scale_x_continuous(breaks = c(2001, 2002)) +
   ylab("Fatalities in 100") +
   ggtitle("Amount of fatalities in Israel in 2001 & 2002") +
   
-  ggsave('israel_fatal_2001_02.png')
+  ggsave('israel_fatal_2001_02.pdf')
 ```
 ```{r}
 israel_2002_01 %>%
@@ -104,9 +109,18 @@ ggplot (data = israel_years) +
   ylab("Fatalities in 100") +
   ggtitle("Amount of fatalities in Israel between 1990 and 2010") +
   
-  ggsave('israel_over_years.png')
+  ggsave('israel_over_years.pdf')
 ```
-
+```{r}
+israel_years %>%
+  summarize(fatalities = sum(best_fatality_guess))
+```
+```{r}
+# Selecting columns relevant for future questions
+israel_years_rel <- israel_years %>%
+  group_by(Year) %>% 
+  select(Country, Year, best_fatality_guess, type_of_violence)
+```
 
 
 Bibliography:
